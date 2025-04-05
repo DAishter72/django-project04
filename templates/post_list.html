@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post list</title>
+  </head>
+  <body>
+    {% if posts %} {% for post in posts %}
+    <h2>{{ post.title }}</h2>
+    <p>{{ post.content }}</p>
+    {% if post.featured_image %}
+    <img
+      src="{{ post.featured_image.url }}"
+      alt="{{ post.title }}"
+      style="max-width: 300px"
+    />
+    {% endif %}
+    <a href="{% url 'post_edit' post.id %}">Edit</a>
+    <form action="{% url 'post_delete' post.id %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="Delete" />
+    </form>
+    <p>{{ post.published_date }}</p>
+    <hr />
+    {% endfor %} {% else %}
+    <h2>No hay posts publicados</h2>
+    {% endif %}
+    <a href="{% url 'post_create' %}">Create new post</a>
+  </body>
+</html>
