@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
 from post.models import Post
 
@@ -20,6 +21,8 @@ class PostCreateView(CreateView):
     template_name = 'post_create.html'
     fields = ['title', 'content', 'featured_image', 'status']
     # Usar reverse_lazy es mejor práctica
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
     success_url = reverse_lazy('post_list')
 
     def form_valid(self, form):
@@ -40,14 +43,33 @@ class PostCreateView(CreateView):
         return super().form_valid(form)
 
 
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'post_detail.html'
+    context_object_name = 'post'
+    slug_field = 'slug'  # Usar slug en lugar de ID para las
+    slug_url_kwarg = 'slug'
+
+    def get_queryset(self):
+        # Mostrar solo posts publicados (o todos si es el autor)
+        queryset = super().get_queryset()
+        if not self.request.user.is_authenticated or self.request.user != queryset.first().author:
+            return queryset.filter(status='published')
+        return queryset
+
+
 class PostEditView(UpdateView):
     model = Post
     template_name = 'post_edit.html'
     fields = ['title', 'content', 'featured_image', 'status']
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
     success_url = SUCCESS  # Redirect to the list of posts after editing
 
 
 class PostDeleteView(DeleteView):
     model = Post
     template_name = 'post_confirm_delete.html'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
     success_url = SUCCESS  # Redirect to the list of posts after deletion

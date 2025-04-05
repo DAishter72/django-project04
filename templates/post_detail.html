@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }} - Detalles</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        .article-header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        .article-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .article-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+        .featured-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .article-content {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #3498db;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <article class="article-detail">
+        <header class="article-header">
+            <h1 class="article-title">{{ post.title }}</h1>
+            
+            <div class="article-meta">
+                Publicado el {{ post.published_date|date:"d F Y" }} 
+                {% if post.updated_date != post.created_date %}
+                    | Última actualización: {{ post.updated_date|date:"d F Y" }}
+                {% endif %}
+                | Por {{ post.author.username }}
+            </div>
+            
+            {% if post.featured_image %}
+                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="featured-image">
+            {% endif %}
+        </header>
+        
+        <div class="article-content">
+            {{ post.content|linebreaks }}
+        </div>
+        
+        <a href="{% url 'post_list' %}" class="back-link">← Volver a todos los artículos</a>
+    </article>
+</body>
+</html>
