@@ -1,113 +1,133 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Posts</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        line-height: 1.6;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-      .post {
-        margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid #eee;
-      }
-      .post-title {
-        color: #2c3e50;
-        margin-bottom: 10px;
-      }
-      .post-content {
-        margin-bottom: 15px;
-      }
-      .post-image {
-        max-width: 300px;
-        height: auto;
-        margin-bottom: 15px;
-        border-radius: 4px;
-        transition: transform 0.3s ease;
-      }
-      .post-image:hover {
-        transform: scale(1.02);
-      }
-      .post-meta {
-        color: #7f8c8d;
-        font-size: 0.9em;
-        margin-bottom: 10px;
-      }
-      .post-actions {
-        margin-top: 10px;
-      }
-      .btn {
-        padding: 5px 10px;
-        text-decoration: none;
-        border-radius: 3px;
-        font-size: 0.9em;
-      }
-      .btn-edit {
-        background-color: #3498db;
-        color: white;
-      }
-      .btn-delete {
-        background-color: #e74c3c;
-        color: white;
-        border: none;
-        cursor: pointer;
-      }
-      .create-link {
-        display: inline-block;
-        margin-top: 20px;
-        padding: 8px 15px;
-        background-color: #2ecc71;
-        color: white;
-        text-decoration: none;
-        border-radius: 3px;
-      }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .post {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .post.draft {
+            background-color: #fffaf0;
+            padding: 15px;
+            border-left: 4px solid #ffa500;
+        }
+        .post-title {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .draft .post-title {
+            color: #ff8c00;
+        }
+        .post-content {
+            margin-bottom: 15px;
+        }
+        .post-image {
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            transition: transform 0.3s ease;
+        }
+        .post-image:hover {
+            transform: scale(1.02);
+        }
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .post-actions {
+            margin-top: 10px;
+        }
+        .btn {
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .btn-edit {
+            background-color: #3498db;
+            color: white;
+        }
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .create-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 15px;
+            background-color: #2ecc71;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+        }
+        .draft-badge {
+            background-color: #ffa500;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <h1>Lista de Posts</h1>
-
-    {% if posts %} {% for post in posts %}
-    <div class="post">
-      <h2 class="post-title">{{ post.title }}</h2>
-
-      <p class="post-content">{{ post.content|truncatechars:200 }}</p>
-
-      {% if post.featured_image %}
-      <a href="{% url 'post_detail' post.slug %}">
-        <img
-          src="{{ post.featured_image.url }}"
-          alt="{{ post.title }}"
-          class="post-image"
-        />
-      </a>
-      {% endif %}
-
-      <p class="post-meta">
-        Publicado el {{ post.published_date|date:"d M Y" }} | Autor: {{ post.author }}
-      </p>
-
-      <div class="post-actions">
-        <a href="{% url 'post_edit' post.slug %}" class="btn btn-edit">Editar</a>
-        <form
-          action="{% url 'post_delete' post.slug %}"
-          method="POST"
-          style="display: inline"
-        >
-          {% csrf_token %}
-          <input type="submit" value="Eliminar" class="btn btn-delete" />
-        </form>
-      </div>
-    </div>
-    {% endfor %} {% else %}
-    <h2>No hay posts publicados</h2>
+    
+    {% if posts %}
+        {% for post in posts %}
+            {% if post.status == 'published' or post.author == request.user %}
+                <div class="post {% if post.status == 'draft' %}draft{% endif %}">
+                    <h2 class="post-title">
+                        {{ post.title }}
+                        {% if post.status == 'draft' %}
+                            <span class="draft-badge">Borrador</span>
+                        {% endif %}
+                    </h2>
+                    
+                    <p class="post-content">{{ post.content|truncatechars:200 }}</p>
+                    
+                    {% if post.featured_image %}
+                        <a href="{% url 'post_detail' post.slug %}">
+                            <img src="{{ post.featured_image.url }}" 
+                                 alt="{{ post.title }}" 
+                                 class="post-image">
+                        </a>
+                    {% endif %}
+                    
+                    <p class="post-meta">
+                        Publicado el {{ post.published_date|date:"d M Y" }} | 
+                        Autor: {{ post.author.username }}
+                        {% if post.status == 'draft' %}
+                            | <strong>Estado:</strong> Borrador
+                        {% endif %}
+                    </p>
+                  
+                </div>
+            {% endif %}
+        {% empty %}
+            <h2>No hay posts publicados</h2>
+        {% endfor %}
+    {% else %}
+        <h2>No hay posts disponibles</h2>
     {% endif %}
-
-    <a href="{% url 'post_create' %}" class="create-link">Crear nuevo post</a>
-  </body>
+    
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'post_create' %}" class="create-link">Crear nuevo post</a>
+    {% endif %}
+</body>
 </html>

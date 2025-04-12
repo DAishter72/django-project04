@@ -72,6 +72,12 @@
         </div>
         
         <a href="{% url 'post_list' %}" class="back-link">← Volver a todos los artículos</a>
+        {% if user.is_authenticated and user == post.author %}
+            <div class="post-actions">
+                <a href="{% url 'post_edit' post.slug %}" class="btn btn-edit">Editar</a>
+                <a href="{% url 'post_delete' post.slug %}">Eliminar</a>
+            </div>
+        {% endif %}
     </article>
 </body>
 </html>

@@ -6,9 +6,6 @@ from django.utils.text import slugify
 from post.models import Post
 
 
-SUCCESS = '/posts/'
-
-
 class PostListView(ListView):
     model = Post
     template_name = 'post_list.html'  # Specify your own template name/location
@@ -64,7 +61,8 @@ class PostEditView(UpdateView):
     fields = ['title', 'content', 'featured_image', 'status']
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
-    success_url = SUCCESS  # Redirect to the list of posts after editing
+    # Redirect to the list of posts after editing
+    success_url = reverse_lazy('post_list')
 
 
 class PostDeleteView(DeleteView):
@@ -72,4 +70,5 @@ class PostDeleteView(DeleteView):
     template_name = 'post_delete.html'
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
-    success_url = SUCCESS  # Redirect to the list of posts after deletion
+    # Redirect to the list of posts after deletion
+    success_url = reverse_lazy('post_list')

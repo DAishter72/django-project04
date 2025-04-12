@@ -10,6 +10,7 @@
     <p>Are you sure you want to delete this post?</p>
     <h2>{{ post.title }}</h2>
     <p>{{ post.content }}</p>
+    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
     <form action="" method="POST">
       {% csrf_token %}
       <input type="submit" value="Delete" />
