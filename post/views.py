@@ -69,7 +69,7 @@ class PostEditView(UpdateView):
 
 class PostDeleteView(DeleteView):
     model = Post
-    template_name = 'post_confirm_delete.html'
+    template_name = 'post_delete.html'
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
     success_url = SUCCESS  # Redirect to the list of posts after deletion
