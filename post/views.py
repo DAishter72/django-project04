@@ -47,13 +47,6 @@ class PostDetailView(DetailView):
     slug_field = 'slug'  # Usar slug en lugar de ID para las
     slug_url_kwarg = 'slug'
 
-    def get_queryset(self):
-        # Mostrar solo posts publicados (o todos si es el autor)
-        queryset = super().get_queryset()
-        if not self.request.user.is_authenticated or self.request.user != queryset.first().author:
-            return queryset.filter(status='published')
-        return queryset
-
 
 class PostEditView(UpdateView):
     model = Post
