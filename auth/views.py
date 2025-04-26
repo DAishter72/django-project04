@@ -24,7 +24,7 @@ class CustomUserCreationForm(UserCreationForm):
 class SignUpView(CreateView):
     model = User
     form_class = CustomUserCreationForm  # Usamos nuestro formulario personalizado
-    template_name = 'authentication/signup.html'
+    template_name = 'registration/signup.html'
     success_url = reverse_lazy('post_list')
 
     def form_valid(self, form):
