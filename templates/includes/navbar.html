@@ -1,31 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Navbar</title>
-</head>
-<body>
-  <nav style="background: #333; padding: 1rem; color: white;">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navbar</title>
+  </head>
+  <body>
+    <nav style="background: #333; padding: 1rem; color: white">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
         <div>
-            <a href="{% url 'post_list' %}" style="color: white; text-decoration: none; margin-right: 1rem;">Inicio</a>
-            <a href="{% url 'post_list' %}" style="color: white; text-decoration: none;">Artículos</a>
+          <a
+            href="{% url 'post_list' %}"
+            style="color: white; text-decoration: none; margin-right: 1rem"
+            >Inicio</a
+          >
+          <a
+            href="{% url 'post_list' %}"
+            style="color: white; text-decoration: none"
+            >Artículos</a
+          >
         </div>
-        
+
         <div>
-            {% if user.is_authenticated %}
-                <span style="margin-right: 1rem;">Hola, {{ user.username }}</span>
-                <a href="#" style="color: white; text-decoration: none;">Cerrar sesión</a>
-            {% else %}
-                <a href="#" style="color: white; text-decoration: none; margin-right: 1rem;">Iniciar sesión</a>
-                <a href="#" style="color: white; text-decoration: none;">Registrarse</a>
-            {% endif %}
+          {% if user.is_authenticated %}
+          <span style="margin-right: 1rem">Hola, {{ user.username }}</span>
+          <a href="#" style="color: white; text-decoration: none"
+            >Cerrar sesión</a
+          >
+          {% else %}
+          <a
+            href="#"
+            style="color: white; text-decoration: none; margin-right: 1rem"
+            >Iniciar sesión</a
+          >
+          <a
+            href="{% url 'signup' %}"
+            style="color: white; text-decoration: none"
+            >Registrarse</a
+          >
+          {% endif %}
         </div>
-    </div>
-</nav>
-{% block content %}
+      </div>
+    </nav>
+    {% block content %}
     <!-- Content goes here -->
-{% endblock %}
-</body>
+    {% endblock %}
+  </body>
 </html>
