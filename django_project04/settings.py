@@ -134,3 +134,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # para la autenticacion de usuarios
 LOGIN_REDIRECT_URL = 'post_list'
 LOGOUT_REDIRECT_URL = 'login'
+
+# para la configuracion de las cookies
+SESSION_COOKIE_AGE = 1209600  # 2 semanas
+SESSION_SAVE_EVERY_REQUEST = True  # Renueva la sesión con cada petición
+# Persistir sesión después de cerrar navegador
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False

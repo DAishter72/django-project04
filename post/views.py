@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
 from post.models import Post
 
 
+@method_decorator(never_cache, name='dispatch')
 class PostListView(ListView):
     model = Post
     template_name = 'post_list.html'  # Specify your own template name/location
@@ -13,6 +16,7 @@ class PostListView(ListView):
     ordering = ['-published_date']  # Order by published date descending
 
 
+@method_decorator(never_cache, name='dispatch')
 class PostCreateView(CreateView):
     model = Post
     template_name = 'post_create.html'
@@ -40,6 +44,7 @@ class PostCreateView(CreateView):
         return super().form_valid(form)
 
 
+@method_decorator(never_cache, name='dispatch')
 class PostDetailView(DetailView):
     model = Post
     template_name = 'post_detail.html'
@@ -48,6 +53,7 @@ class PostDetailView(DetailView):
     slug_url_kwarg = 'slug'
 
 
+@method_decorator(never_cache, name='dispatch')
 class PostEditView(UpdateView):
     model = Post
     template_name = 'post_edit.html'
@@ -58,6 +64,7 @@ class PostEditView(UpdateView):
     success_url = reverse_lazy('post_list')
 
 
+@method_decorator(never_cache, name='dispatch')
 class PostDeleteView(DeleteView):
     model = Post
     template_name = 'post_delete.html'

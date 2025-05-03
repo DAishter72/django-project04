@@ -1,9 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Navbar</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
   <body>
     <nav style="background: #333; padding: 1rem; color: white">
@@ -30,9 +32,14 @@
         <div>
           {% if user.is_authenticated %}
           <span style="margin-right: 1rem">Hola, {{ user.username }}</span>
-          <a href="#" style="color: white; text-decoration: none"
-            >Cerrar sesión</a
+          <form
+            action="{% url 'logout' %}"
+            method="post"
+            style="display: inline"
           >
+            {% csrf_token %}
+            <button type="submit" class="navbar-btn">Cerrar sesion</button>
+          </form>
           {% else %}
           <a
             href="{% url 'login' %}"
